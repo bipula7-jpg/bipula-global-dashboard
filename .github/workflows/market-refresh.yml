@@ -1,0 +1,32 @@
+# Place this file at .github/workflows/market-refresh.yml in your repo.
+
+name: Market Data Refresh
+
+on:
+  schedule:
+    - cron: '15 13-20 * * 1-5'   # once per hour, on the 15-min mark, 13:00-20:00 UTC, weekdays
+  workflow_dispatch: {}           # allows manual "Run workflow" trigger from the Actions tab
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install yfinance curl_cffi
+
+      - name: Fetch market data
+        run: python fetch_market_data.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "market-refresh-bot"
+          git config user.email "actions@github.com"
+          git add data/market.json
+          git diff --quiet --cached || git commit -m "Refresh market data"
+          git push
