@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bipula Aryal — Global Summary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#122036; --navy-deep:#0b1526; --sand:#c6a26a; --sand-soft:#e4d3b3;
+    --ivory:#faf6ee; --ivory-panel:#f3ede0; --charcoal:#26241f; --line:#ddd3bd;
+    --up:#3f6b4c; --down:#9c3f3f; --neutral:#8a8577;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--ivory);color:var(--charcoal);font-family:"IBM Plex Sans",sans-serif;}
+  h1,h2,h3,.serif{font-family:"Source Serif 4",serif;}
+  .mono{font-family:"IBM Plex Mono",monospace;}
+  a{color:inherit; text-decoration:none;}
+
+  .topbar{display:flex; justify-content:space-between; align-items:center; padding:10px 32px; background:var(--navy-deep); color:var(--ivory); font-size:12.5px; letter-spacing:.02em;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--sand);display:inline-block;margin-right:6px;}
+  .dot.open{background:#5c9f6f;} .dot.closed{background:#8a8577;}
+
+  .hero{padding:64px 32px 40px; text-align:center; border-bottom:1px solid var(--line);}
+  .hero h1{font-size:3rem; margin:0; color:var(--navy); letter-spacing:.01em;}
+  .hero .tagline{margin-top:8px; font-size:1rem; color:var(--neutral); font-weight:500;}
+  .hero .thesis{max-width:60ch; margin:22px auto 0; font-size:.95rem; line-height:1.6; color:var(--charcoal);}
+  .cta{
+    display:inline-block; margin-top:26px; padding:11px 28px; background:var(--navy);
+    color:var(--ivory); font-size:.82rem; font-weight:600; letter-spacing:.04em;
+    border:1px solid var(--navy);
+  }
+  .cta:hover{background:var(--navy-deep);}
+
+  main{max-width:1280px; margin:0 auto; padding:40px 32px;}
+
+  .snapshot{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:56px;}
+  @media (max-width:900px){.snapshot{grid-template-columns:repeat(2,1fr);}}
+  .card{background:var(--ivory-panel); border:1px solid var(--line); border-radius:3px; padding:14px 16px;}
+  .card .label{font-size:.72rem; color:var(--neutral); font-weight:500;}
+  .card .value{font-family:"IBM Plex Mono",monospace; font-size:1.25rem; margin-top:4px; color:var(--navy);}
+  .card .delta{font-family:"IBM Plex Mono",monospace; font-size:.8rem; margin-top:2px;}
+  .card .delta.up{color:var(--up);} .card .delta.down{color:var(--down);}
+
+  .section-label{font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; color:var(--neutral); border-bottom:1px solid var(--line); padding-bottom:8px; margin-bottom:18px;}
+
+  .lens-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:56px;}
+  @media (max-width:900px){.lens-grid{grid-template-columns:1fr;}}
+  .lens{background:var(--ivory-panel); border:1px solid var(--line); padding:22px; display:flex; flex-direction:column; height:100%;}
+  .lens h3{margin:0 0 8px; font-size:1.05rem; color:var(--navy);}
+  .lens p{font-size:.86rem; line-height:1.55; color:var(--charcoal); margin:0 0 16px; flex-grow:1;}
+  .lens a{font-size:.78rem; font-weight:600; color:var(--navy); border-bottom:1px solid var(--sand);}
+
+  .pages-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+  @media (max-width:900px){.pages-grid{grid-template-columns:repeat(2,1fr);}}
+  .page-link{
+    background:var(--navy); color:var(--ivory); padding:16px; font-size:.85rem; font-weight:500;
+    display:flex; align-items:center; justify-content:space-between; border:1px solid var(--navy);
+  }
+  .page-link:hover{background:var(--navy-deep);}
+  .page-link span.arrow{color:var(--sand);}
+
+  footer{border-top:1px solid var(--line); margin-top:40px; padding:26px 32px 40px; font-size:.75rem; color:var(--neutral); max-width:1280px; margin-left:auto; margin-right:auto;}
+  footer .disclaimer{max-width:90ch; line-height:1.6; padding:14px 16px; background:var(--ivory-panel); border-left:3px solid var(--sand); color:var(--charcoal);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="mono" id="clock">— — —</div>
+  <div><span id="marketStatus"><span class="dot"></span>CHECKING MARKET STATUS</span></div>
+</div>
+
+<div class="hero">
+  <h1>BIPULA ARYAL</h1>
+  <div class="tagline">Markets &middot; Macro &middot; Global Intelligence</div>
+  <p class="thesis">
+    A fact-based read on where capital is moving — not a forecast, not a recommendation.
+    Every figure here is sourced and timestamped; every judgment call is labeled as one.
+  </p>
+  <a href="dashboard.html" class="cta">Enter Full Dashboard →</a>
+</div>
+
+<main>
+
+  <div class="section-label">Live Snapshot</div>
+  <div class="snapshot">
+    <div class="card"><div class="label">USD/EUR</div><div class="value pending" id="snapEUR">—</div></div>
+    <div class="card"><div class="label">USD/JPY</div><div class="value pending" id="snapJPY">—</div></div>
+    <div class="card"><div class="label">Bitcoin</div><div class="value pending" id="snapBTC">—</div></div>
+    <div class="card"><div class="label">Ethereum</div><div class="value pending" id="snapETH">—</div></div>
+  </div>
+
+  <div class="section-label">Where Capital Is Moving</div>
+  <div class="lens-grid">
+    <div class="lens">
+      <h3>Current State</h3>
+      <p>Sector rotation, breadth, and where risk appetite sits right now across equities, credit, and FX — the picture as of today, no interpretation layered on.</p>
+      <a href="dashboard.html">View market overview →</a>
+    </div>
+    <div class="lens">
+      <h3>Flow Signals</h3>
+      <p>Unusual volume, insider filing activity, and capital markets deal flow — observable evidence of where money is entering or leaving, sourced and timestamped.</p>
+      <a href="dashboard.html">View flow data →</a>
+    </div>
+    <div class="lens">
+      <h3>Forward Calendar</h3>
+      <p>Rate expectations, upcoming economic releases, and scheduled catalysts — what's next on the calendar, not a prediction of what it will do to markets.</p>
+      <a href="dashboard.html">View calendar →</a>
+    </div>
+  </div>
+
+  <div class="section-label">Explore</div>
+  <div class="pages-grid">
+    <a href="dashboard.html" class="page-link">Full Dashboard <span class="arrow">→</span></a>
+    <a href="dashboard.html#equities" class="page-link">Equities <span class="arrow">→</span></a>
+    <a href="dashboard.html#fixed-income" class="page-link">Fixed Income <span class="arrow">→</span></a>
+    <a href="dashboard.html#macro" class="page-link">Macro <span class="arrow">→</span></a>
+    <a href="dashboard.html#fx-commodities" class="page-link">FX &amp; Commodities <span class="arrow">→</span></a>
+    <a href="dashboard.html#geopolitics" class="page-link">Geopolitics <span class="arrow">→</span></a>
+    <a href="dashboard.html#calendar" class="page-link">Calendar <span class="arrow">→</span></a>
+    <a href="dashboard.html#watchlist" class="page-link">Watchlist <span class="arrow">→</span></a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="disclaimer">
+    For informational purposes only. Nothing on this site is investment advice or a recommendation to buy, sell, or hold any security. Data is sourced from public, free-tier providers and may be delayed, incomplete, or revised.
+  </div>
+</footer>
+
+<script>
+function getET(){
+  const fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour12: false, hour:'2-digit', minute:'2-digit', second:'2-digit', weekday:'short' });
+  const parts = fmt.formatToParts(new Date());
+  const get = t => parts.find(p => p.type === t).value;
+  return { hour: parseInt(get('hour'),10), minute: parseInt(get('minute'),10), second: parseInt(get('second'),10), weekday: get('weekday') };
+}
+function tick(){
+  const {hour,minute,second} = getET();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('clock').textContent = `${pad(hour)}:${pad(minute)}:${pad(second)} ET`;
+}
+setInterval(tick,1000); tick();
+
+function marketStatus(){
+  const {hour,minute,weekday} = getET();
+  const t = hour + minute/60;
+  const el = document.getElementById('marketStatus');
+  if(weekday==='Sat'||weekday==='Sun'){ el.innerHTML='<span class="dot closed"></span>CLOSED · WEEKEND'; return; }
+  if(t>=9.5 && t<16){ el.innerHTML='<span class="dot open"></span>MARKET OPEN'; }
+  else if(t>=4 && t<9.5){ el.innerHTML='<span class="dot"></span>PRE-MARKET'; }
+  else if(t>=16 && t<20){ el.innerHTML='<span class="dot"></span>AFTER-HOURS'; }
+  else { el.innerHTML='<span class="dot closed"></span>CLOSED'; }
+}
+marketStatus(); setInterval(marketStatus,60000);
+
+async function loadSnapshot(){
+  try{
+    const fx = await (await fetch('https://api.frankfurter.dev/v1/latest')).json();
+    const usdPerEur = fx.rates['USD'];
+    document.getElementById('snapEUR').textContent = (1/usdPerEur).toFixed(4);
+    document.getElementById('snapJPY').textContent = (fx.rates['JPY']/usdPerEur).toFixed(2);
+  }catch(e){}
+  try{
+    const cg = await (await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd')).json();
+    document.getElementById('snapBTC').textContent = '$' + cg.bitcoin.usd.toLocaleString();
+    document.getElementById('snapETH').textContent = '$' + cg.ethereum.usd.toLocaleString();
+  }catch(e){}
+}
+loadSnapshot();
+</script>
+
+</body>
+</html>

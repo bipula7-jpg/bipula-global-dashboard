@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bipula Aryal — Financial Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#122036;
+    --navy-deep:#0b1526;
+    --sand:#c6a26a;
+    --sand-soft:#e4d3b3;
+    --ivory:#faf6ee;
+    --ivory-panel:#f3ede0;
+    --charcoal:#26241f;
+    --line:#ddd3bd;
+    --up:#3f6b4c;
+    --down:#9c3f3f;
+    --neutral:#8a8577;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--ivory);color:var(--charcoal);font-family:"IBM Plex Sans",sans-serif;}
+  h1,h2,h3,.serif{font-family:"Source Serif 4",serif;}
+  .mono{font-family:"IBM Plex Mono",monospace;}
+  a{color:inherit;}
+
+  .topbar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 32px; background:var(--navy-deep); color:var(--ivory);
+    font-size:12.5px; letter-spacing:.02em;
+  }
+  .topbar .status{display:flex; gap:18px; align-items:center;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--sand);display:inline-block;margin-right:6px;}
+  .dot.open{background:#5c9f6f;}
+  .dot.closed{background:#8a8577;}
+
+  .masthead{
+    padding:44px 32px 28px; border-bottom:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;
+  }
+  .masthead h1{font-size:2.6rem; font-weight:600; margin:0; letter-spacing:.01em; color:var(--navy);}
+  .masthead .tagline{margin-top:6px; font-size:.95rem; color:var(--neutral); font-weight:500;}
+  .masthead .updated{font-size:.8rem; color:var(--neutral); text-align:right;}
+
+  nav{
+    display:flex; gap:0; padding:0 32px; background:var(--navy); overflow-x:auto;
+  }
+  nav a{
+    padding:13px 16px; font-size:.78rem; font-weight:500; color:var(--sand-soft);
+    text-decoration:none; white-space:nowrap; border-bottom:2px solid transparent;
+  }
+  nav a.active, nav a:hover{color:var(--ivory); border-bottom:2px solid var(--sand);}
+
+  main{max-width:1280px; margin:0 auto; padding:32px;}
+
+  section{margin-bottom:44px;}
+  .section-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px; border-bottom:1px solid var(--line); padding-bottom:8px;}
+  .section-head h2{font-size:1.15rem; font-weight:600; margin:0; color:var(--navy);}
+  .section-head .note{font-size:.72rem; color:var(--neutral); text-transform:uppercase; letter-spacing:.06em;}
+
+  .grid-5{display:grid; grid-template-columns:repeat(5,1fr); gap:12px;}
+  .grid-4{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  @media (max-width:900px){.grid-5,.grid-4,.grid-3{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.grid-5,.grid-4,.grid-3{grid-template-columns:1fr;}}
+
+  .card{
+    background:var(--ivory-panel); border:1px solid var(--line); border-radius:3px;
+    padding:14px 16px; position:relative;
+  }
+  .card .label{font-size:.72rem; color:var(--neutral); font-weight:500;}
+  .card .value{font-family:"IBM Plex Mono",monospace; font-size:1.35rem; margin-top:4px; color:var(--navy);}
+  .card .delta{font-family:"IBM Plex Mono",monospace; font-size:.85rem; margin-top:2px;}
+  .card .delta.up{color:var(--up);}
+  .card .delta.down{color:var(--down);}
+  .card .meta{font-size:.68rem; color:var(--neutral); margin-top:8px; border-top:1px dashed var(--line); padding-top:6px;}
+
+  .pending{ color:var(--neutral); font-style:italic; font-size:.85rem; }
+
+  .editorial{background:var(--ivory-panel); border:1px solid var(--line); padding:22px 24px;}
+  .editorial .tag{
+    display:inline-block; font-size:.68rem; font-weight:600; letter-spacing:.04em;
+    padding:2px 8px; border:1px solid var(--sand); color:var(--navy); background:var(--sand-soft);
+    margin-right:8px; margin-bottom:6px;
+  }
+  .editorial h3{margin:18px 0 6px; font-size:1.02rem;}
+  .editorial p{margin:0 0 4px; font-size:.92rem; line-height:1.55; max-width:72ch;}
+  .editorial .block{margin-bottom:16px;}
+
+  footer{
+    border-top:1px solid var(--line); margin-top:20px; padding:26px 32px 40px;
+    font-size:.75rem; color:var(--neutral); max-width:1280px; margin-left:auto; margin-right:auto;
+  }
+  footer .disclaimer{
+    max-width:90ch; line-height:1.6; padding:14px 16px; background:var(--ivory-panel);
+    border-left:3px solid var(--sand); margin-bottom:14px; color:var(--charcoal);
+  }
+  footer .sources{line-height:1.8;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="mono" id="clock">— — —</div>
+  <div class="status">
+    <span id="marketStatus"><span class="dot"></span>CHECKING MARKET STATUS</span>
+  </div>
+</div>
+
+<div class="masthead">
+  <div>
+    <h1>BIPULA ARYAL</h1>
+    <div class="tagline">Markets &middot; Macro &middot; Global Intelligence</div>
+  </div>
+  <div class="updated" id="lastUpdated">Loading feeds…</div>
+</div>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="#" class="active">Full Dashboard</a>
+  <a href="#">Live News</a>
+  <a href="#">Equities</a>
+  <a href="#">Fixed Income</a>
+  <a href="#">Macro</a>
+  <a href="#">FX &amp; Commodities</a>
+  <a href="#">Tech &amp; AI</a>
+  <a href="#">Geopolitics</a>
+  <a href="#">Calendar</a>
+  <a href="#">Watchlist</a>
+  <a href="#">My Notes</a>
+  <a href="#">Learn</a>
+</nav>
+
+<main>
+
+  <section>
+    <div class="section-head">
+      <h2>Market Overview</h2>
+      <span class="note">Pending backend feed</span>
+    </div>
+    <div class="grid-5" id="indexGrid"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Live News</h2>
+      <span class="note">Bloomberg Originals &middot; free public stream</span>
+    </div>
+    <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border:1px solid var(--line); background:#000;">
+      <iframe
+        src="https://www.youtube.com/embed/QB5BNdBFujE?autoplay=0"
+        title="Bloomberg Business News Live"
+        style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="meta" style="margin-top:8px; font-size:.72rem; color:var(--neutral);">
+      Embedded from Bloomberg's official public YouTube channel. Not affiliated with or endorsed by Bloomberg L.P.
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>FX</h2>
+      <span class="note">Live &middot; Frankfurter (ECB)</span>
+    </div>
+    <div class="grid-4" id="fxGrid">
+      <div class="card"><div class="label">Loading…</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Crypto</h2>
+      <span class="note">Live &middot; CoinGecko</span>
+    </div>
+    <div class="grid-3" id="cryptoGrid">
+      <div class="card"><div class="label">Loading…</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Commodities</h2>
+      <span class="note">Pending backend feed</span>
+    </div>
+    <div class="grid-4" id="commodityGrid"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>What's Moving Markets Today</h2>
+      <span class="note">Editorial &middot; fact / reaction / context / watch</span>
+    </div>
+    <div class="editorial">
+      <div class="block">
+        <span class="tag">Fact</span>
+        <p>This section is wired to display verified, sourced developments once the news-aggregation Action is connected — no story will render without a source and timestamp attached.</p>
+      </div>
+      <div class="block">
+        <span class="tag">Market Reaction</span>
+        <p>Distinct from the fact above: what price action, yields, or flows actually did in response — never inferred, only reported once observed.</p>
+      </div>
+      <div class="block">
+        <span class="tag">Context</span>
+        <p>Background needed to understand why the fact matters, kept separate from the reaction itself.</p>
+      </div>
+      <div class="block">
+        <span class="tag">Watch Next</span>
+        <p>What upcoming data point or event could change the picture — a calendar reference, not a forecast.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="disclaimer">
+    For informational purposes only. Nothing on this site is investment advice or a recommendation to buy, sell, or hold any security. Data is sourced from public, free-tier providers and may be delayed, incomplete, or revised. Verify independently before relying on any figure here. Not affiliated with any data provider, exchange, or news outlet referenced.
+  </div>
+  <div class="sources">
+    Data sources: Frankfurter (ECB FX rates) &middot; CoinGecko (crypto) &middot; yfinance via scheduled backend job (indices, sectors, commodities) &middot; FRED (rates, spreads — pending) &middot; SEC EDGAR (Form 4 / 13F — pending) &middot; public RSS feeds (news — pending)
+  </div>
+</footer>
+
+<script>
+// ---- Clock (Eastern Time, DST-aware via Intl) ----
+function getET(){
+  const fmt = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York', hour12: false,
+    hour: '2-digit', minute: '2-digit', second: '2-digit', weekday: 'short'
+  });
+  const parts = fmt.formatToParts(new Date());
+  const get = t => parts.find(p => p.type === t).value;
+  return {
+    hour: parseInt(get('hour'), 10),
+    minute: parseInt(get('minute'), 10),
+    second: parseInt(get('second'), 10),
+    weekday: get('weekday')
+  };
+}
+
+function tick(){
+  const {hour, minute, second} = getET();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('clock').textContent = `${pad(hour)}:${pad(minute)}:${pad(second)} ET`;
+}
+setInterval(tick, 1000); tick();
+
+function marketStatus(){
+  const {hour, minute, weekday} = getET();
+  const t = hour + minute/60;
+  const el = document.getElementById('marketStatus');
+  if(weekday === 'Sat' || weekday === 'Sun'){ el.innerHTML = '<span class="dot closed"></span>CLOSED · WEEKEND'; return; }
+  if(t >= 9.5 && t < 16){ el.innerHTML = '<span class="dot open"></span>MARKET OPEN'; }
+  else if(t >= 4 && t < 9.5){ el.innerHTML = '<span class="dot"></span>PRE-MARKET'; }
+  else if(t >= 16 && t < 20){ el.innerHTML = '<span class="dot"></span>AFTER-HOURS'; }
+  else { el.innerHTML = '<span class="dot closed"></span>CLOSED'; }
+}
+marketStatus(); setInterval(marketStatus, 60000);
+
+const INDEX_NAMES = ['S&P 500','Nasdaq Composite','Dow Jones','Russell 2000','VIX'];
+const COMMODITY_NAMES = ['WTI Crude','Brent Crude','Nat Gas','Gold'];
+
+function renderQuoteCards(gridId, names, section, generatedAt){
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = names.map(name => {
+    const q = section ? section[name] : null;
+    if(!q || q.status === 'DATA UNAVAILABLE' || q.price === undefined){
+      return `
+      <div class="card">
+        <div class="label">${name}</div>
+        <div class="value pending">DATA UNAVAILABLE</div>
+        <div class="meta">Awaiting scheduled feed</div>
+      </div>`;
+    }
+    const cls = q.pct_change >= 0 ? 'up' : 'down';
+    const sign = q.pct_change >= 0 ? '+' : '';
+    return `
+      <div class="card">
+        <div class="label">${name}</div>
+        <div class="value">${q.price.toLocaleString()}</div>
+        <div class="delta ${cls}">${sign}${q.change} (${sign}${q.pct_change}%)</div>
+        <div class="meta">Prev close ${q.prev_close} &middot; ${generatedAt ? new Date(generatedAt).toLocaleString() : ''}</div>
+      </div>`;
+  }).join('');
+}
+
+async function loadMarketJson(){
+  try{
+    const res = await fetch('data/market.json', {cache: 'no-store'});
+    if(!res.ok) throw new Error('no market.json yet');
+    const data = await res.json();
+    renderQuoteCards('indexGrid', INDEX_NAMES, data.indices, data.generated_at);
+    renderQuoteCards('commodityGrid', COMMODITY_NAMES, data.commodities, data.generated_at);
+    document.querySelectorAll('.note')[0].textContent = 'Live · refreshed ' + new Date(data.generated_at).toLocaleTimeString();
+  }catch(e){
+    renderQuoteCards('indexGrid', INDEX_NAMES, null, null);
+    renderQuoteCards('commodityGrid', COMMODITY_NAMES, null, null);
+  }
+}
+loadMarketJson();
+
+async function loadFX(){
+  const pairs = ['EUR','GBP','JPY','CNY'];
+  try{
+    const res = await fetch('https://api.frankfurter.dev/v1/latest');
+    const data = await res.json();
+    const usdPerEur = data.rates['USD'];
+    const grid = document.getElementById('fxGrid');
+    grid.innerHTML = pairs.map(p => {
+      const rate = (p === 'EUR') ? (1 / usdPerEur) : (data.rates[p] / usdPerEur);
+      return `
+      <div class="card">
+        <div class="label">USD/${p}</div>
+        <div class="value">${rate.toFixed(4)}</div>
+        <div class="meta">As of ${data.date} &middot; Frankfurter/ECB</div>
+      </div>`;
+    }).join('');
+  }catch(e){
+    document.getElementById('fxGrid').innerHTML = '<div class="card"><div class="value pending">DATA TEMPORARILY UNAVAILABLE</div></div>';
+  }
+}
+
+async function loadCrypto(){
+  try{
+    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true');
+    const data = await res.json();
+    const names = {bitcoin:'Bitcoin', ethereum:'Ethereum', solana:'Solana'};
+    const grid = document.getElementById('cryptoGrid');
+    grid.innerHTML = Object.keys(names).map(k => {
+      const chg = data[k].usd_24h_change;
+      const cls = chg >= 0 ? 'up' : 'down';
+      const sign = chg >= 0 ? '+' : '';
+      return `
+      <div class="card">
+        <div class="label">${names[k]}</div>
+        <div class="value">$${data[k].usd.toLocaleString(undefined,{maximumFractionDigits:2})}</div>
+        <div class="delta ${cls}">${sign}${chg.toFixed(2)}% · 24h</div>
+        <div class="meta">CoinGecko · live</div>
+      </div>`;
+    }).join('');
+  }catch(e){
+    document.getElementById('cryptoGrid').innerHTML = '<div class="card"><div class="value pending">DATA TEMPORARILY UNAVAILABLE</div></div>';
+  }
+}
+
+loadFX();
+loadCrypto();
+document.getElementById('lastUpdated').textContent = 'Page rendered ' + new Date().toLocaleString();
+</script>
+
+</body>
+</html>
